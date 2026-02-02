@@ -1,57 +1,216 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <title>DoramaFlix Pro</title>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-body {
-  margin:0;
-  background:#0B0B0F;
-  color:#fff;
-  font-family:Arial;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+
+body{background:#0e0b16;color:white}
+
+/* HEADER */
+header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 16px;
+background:linear-gradient(135deg,#4c1d95,#7c3aed);
 }
-header {
-  padding:16px;
-  font-size:22px;
-  font-weight:bold;
-  color:#7A3CFF;
-  aligment:center;
+.menu-btn{font-size:26px;cursor:pointer}
+.logo{font-size:18px;font-weight:bold}
+
+/* MENU */
+.sidebar{
+position:fixed;top:0;left:-260px;width:260px;height:100%;
+background:#1a102e;padding:20px;transition:.3s;z-index:1000
 }
-input {
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  margin:12px 0;
+.sidebar.active{left:0}
+.sidebar h3{margin-bottom:12px}
+.sidebar a{
+display:block;color:white;text-decoration:none;padding:10px;
+border-radius:8px;margin-bottom:6px
 }
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  gap:12px;
+.sidebar a:hover{background:#6d28d9}
+
+/* BUSCA */
+.search-box{padding:12px}
+.search-box input{
+width:100%;padding:12px;border-radius:20px;border:none;outline:none
 }
-.card img {
-  width:100%;
-  border-radius:12px;
-  box-shadow:0 0 10px #7A3CFF50;
+
+/* SLIDER */
+.slider{margin:12px;border-radius:12px;overflow:hidden}
+.slider img{width:100%;display:none}
+.slider img.active{display:block}
+
+/* SEÇÃO */
+.section{padding:16px}
+.section h2{margin-bottom:10px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+
+.card{
+background:#1a102e;border-radius:12px;overflow:hidden;
+transition:.2s;cursor:pointer
 }
-.card p {
-  margin-top:6px;
-  font-size:14px;
+.card:hover{transform:scale(1.02)}
+.card img{width:100%}
+.card-content{padding:10px}
+
+.price{color:#a78bfa;font-weight:bold}
+
+/* BOTÃO */
+.btn-buy{
+padding:10px;border-radius:8px;border:none;width:100%;
+background:#7c3aed;color:white;cursor:pointer;margin-top:6px
 }
+.btn-buy:hover{background:#a78bfa}
+
+/* LOADING */
+#loading{
+position:fixed;inset:0;background:rgba(0,0,0,.7);
+display:none;align-items:center;justify-content:center;
+color:#a78bfa;font-size:22px;z-index:9999
+}
+
+/* FOOTER */
+footer{text-align:center;padding:16px;opacity:.6}
 </style>
 </head>
 
 <body>
-<header> DoramaFlix Pro</header>
-<input id="search" placeholder="Buscar Doramas...">
 
-<div class="grid" id="grid"></div>
+<header>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<div class="logo">💜 DoramaFlix Pro</div>
+</header>
+
+<!-- MENU -->
+<div class="sidebar" id="menu">
+<h3>📂 Menu</h3>
+<a onclick="filterCategory('popular')">🔥 Mais Vendidos</a>
+<a onclick="filterCategory('dorama')">🎬 Doramas</a>
+<a onclick="filterCategory('serie')">📺 Séries</a>
+<a onclick="filterCategory('lancamento')">🆕 Lançamentos</a>
+<a href="admin.html">⚙️ Painel ADM</a>
+<a href="https://t.me/RendaAzulBot" target="_blank">🤖 Bot Telegram</a>
+<a href="https://t.me/doramaasmax" target="_blank">📢 Grupo Telegram</a>
+</div>
+
+<!-- BUSCA -->
+<div class="search-box">
+<input id="search" placeholder="Buscar Doramas ou Séries..." onkeyup="searchItems(event)">
+</div>
+
+<!-- SLIDER -->
+<div class="slider">
+<img src="https://sensible-jade-o1zox5hv0x.edgeone.app/doramas-3.jpg" class="active">
+<img src="https://marginal-copper-dov9f4d6w1.edgeone.app/_image.jpg">
+<img src="https://secret-aqua-u1abe1jw8p.edgeone.app/Indian%20web%20series.jpg">
+</div>
+
+<!-- MAIS VENDIDOS -->
+<div class="section">
+<h2>🔥 Mais Vendidos</h2>
+<div class="grid" id="productList">
+
+<div class="card item" data-category="dorama" onclick="openDetail('1')">
+<img src="https://i.postimg.cc/7Ygj801x/IMG-20260131-193417-399.jpg">
+<div class="card-content">
+<h4 class="title">Princesa Indomável</h4>
+<p class="price">R$ 5,00</p>
+<button class="btn-buy">Comprar</button>
+</div>
+</div>
+
+<div class="card item" data-category="serie" onclick="openDetail('2')">
+<img src="https://i.postimg.cc/pry8Qf2S/IMG-20260131-200656-219.jpg">
+<div class="card-content">
+<h4 class="title">Beleza Fria Nova Vida</h4>
+<p class="price">R$ 5,00</p>
+<button class="btn-buy">Comprar</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<footer>© 2026 DoramaFlix Pro — Streaming Premium</footer>
+
+<!-- LOADING -->
+<div id="loading">⏳ Carregando...</div>
 
 <script>
 const tg = Telegram.WebApp;
+tg.expand();
+
+const menu = document.getElementById("menu");
+const loading = document.getElementById("loading");
+const searchInput = document.getElementById("search");
+
+// MENU
+function toggleMenu(){
+menu.classList.toggle("active");
+}
+
+// FECHAR MENU FORA
+document.addEventListener("click", e=>{
+if(!menu.contains(e.target) && !e.target.classList.contains("menu-btn")){
+menu.classList.remove("active");
+}
+});
+
+// SLIDER
+let slides=document.querySelectorAll(".slider img");
+let i=0;
+setInterval(()=>{
+slides[i].classList.remove("active");
+i=(i+1)%slides.length;
+slides[i].classList.add("active");
+},3000);
+
+// LOADING
+function showLoading(){loading.style.display="flex"}
+function hideLoading(){loading.style.display="none"}
+
+// BUSCA + FECHAR TECLADO
+function searchItems(e){
+if(e.key==="Enter") searchInput.blur();
+let text=searchInput.value.toLowerCase();
+let items=document.querySelectorAll(".item");
+
+showLoading();
+setTimeout(()=>{
+items.forEach(item=>{
+let title=item.querySelector(".title").innerText.toLowerCase();
+item.style.display=title.includes(text)?"block":"none";
+});
+hideLoading();
+},500);
+}
+
+// FILTRAR CATEGORIA
+function filterCategory(cat){
+showLoading();
+document.querySelectorAll(".item").forEach(item=>{
+item.style.display=item.dataset.category===cat||cat==="popular"?"block":"none";
+});
+menu.classList.remove("active");
+setTimeout(hideLoading,400);
+}
+
+// ABRIR DETAIL
+function openDetail(id){
+showLoading();
+setTimeout(()=>{
+window.location.href="detail.html?id="+id;
+},400);
+}
 tg.expand();
 
 let items = [];
@@ -75,17 +234,18 @@ function render(list){
    `;
  });
 }
-
-document.getElementById("search").oninput = e => {
- const t = e.target.value.toLowerCase();
- render(items.filter(i => i.title.toLowerCase().includes(t)));
-};
-
-function openItem(id){
- window.location.href = "detail.html?id=" + id;
-}
+// BOTÃO COMPRAR
+document.querySelectorAll(".btn-buy").forEach(btn=>{
+btn.addEventListener("click", e=>{
+e.stopPropagation();
+showLoading();
+setTimeout(()=>{
+hideLoading();
+alert("💜 Compra iniciada — redirecionando ao pagamento...");
+},600);
+});
+});
 </script>
-</body>
-</html>
+
 </body>
 </html>
