@@ -242,6 +242,7 @@ showLoading();
 setTimeout(()=>{
 hideLoading();
 alert("💜 Compra iniciada — redirecionando ao pagamento...");
+ window.location.href = "detail.html?produto=" + encodeURIComponent(title);
 },600);
 });
 });
