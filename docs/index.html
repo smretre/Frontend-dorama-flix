@@ -215,7 +215,7 @@ tg.expand();
 
 let items = [];
 
-fetch("https://dorama-repository-fp.onrender.com/")
+fetch("https://dorama-repository-fp.onrender.com/api/catalog")
 .then(r=>r.json())
 .then(data => {
  items = data;
