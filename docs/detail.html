@@ -5,7 +5,7 @@
 <script>
 const id = new URLSearchParams(location.search).get("id");
 
-fetch("https://dorama-repository-fp.onrender.com/" + id)
+fetch("https://dorama-repository-fp.onrender.com/api/item/" + id)
 .then(r=>r.json())
 .then(d => {
  document.getElementById("content").innerHTML = `
@@ -26,7 +26,7 @@ fetch("https://dorama-repository-fp.onrender.com/" + id)
 });
 
 function buy(id){
- fetch("https://SEU_BACKEND/api/create_payment",{
+ fetch("https://dorama-repository-fp.onrender.com/api/create_payment",{
    method:"POST",
    headers:{'Content-Type':'application/json'},
    body: JSON.stringify({
