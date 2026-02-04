@@ -155,112 +155,116 @@ const searchInput = document.getElementById("search");
 
 // MENU
 function toggleMenu(){
-menu.classList.toggle("active");
+ menu.classList.toggle("active");
 }
 
 // FECHAR MENU FORA
 document.addEventListener("click", e=>{
-if(!menu.contains(e.target) && !e.target.classList.contains("menu-btn")){
-menu.classList.remove("active");
-}
+ if(!menu.contains(e.target) && !e.target.classList.contains("menu-btn")){
+   menu.classList.remove("active");
+ }
 });
 
 // SLIDER
-let slides=document.querySelectorAll(".slider img");
-let i=0;
+let slides = document.querySelectorAll(".slider img");
+let i = 0;
 setInterval(()=>{
-slides[i].classList.remove("active");
-i=(i+1)%slides.length;
-slides[i].classList.add("active");
+ slides[i].classList.remove("active");
+ i = (i+1) % slides.length;
+ slides[i].classList.add("active");
 },3000);
 
 // LOADING
-function showLoading(){loading.style.display="flex"}
-function hideLoading(){loading.style.display="none"}
+function showLoading(){ loading.style.display = "flex" }
+function hideLoading(){ loading.style.display = "none" }
 
-// BUSCA + FECHAR TECLADO
+// BUSCA
 function searchItems(e){
-if(e.key==="Enter") searchInput.blur();
-let text=searchInput.value.toLowerCase();
-let items=document.querySelectorAll(".item");
+ if(e.key==="Enter") searchInput.blur();
+ let text = searchInput.value.toLowerCase();
+ let items = document.querySelectorAll(".item");
 
-showLoading();
-setTimeout(()=>{
-items.forEach(item=>{
-let title=item.querySelector(".title").innerText.toLowerCase();
-item.style.display=title.includes(text)?"block":"none";
-});
-hideLoading();
-},500);
+ showLoading();
+ setTimeout(()=>{
+   items.forEach(item=>{
+     let title = item.querySelector(".title").innerText.toLowerCase();
+     item.style.display = title.includes(text) ? "block" : "none";
+   });
+   hideLoading();
+ },300);
 }
 
-// FILTRAR CATEGORIA
+// FILTRAR
 function filterCategory(cat){
-showLoading();
-document.querySelectorAll(".item").forEach(item=>{
-item.style.display=item.dataset.category===cat||cat==="popular"?"block":"none";
-});
-menu.classList.remove("active");
-setTimeout(hideLoading,400);
+ showLoading();
+ document.querySelectorAll(".item").forEach(item=>{
+   item.style.display = item.dataset.category===cat || cat==="popular" ? "block" : "none";
+ });
+ menu.classList.remove("active");
+ setTimeout(hideLoading,200);
 }
 
-// ABRIR DETAIL
+// DETAIL PAGE
 function openDetail(id){
-showLoading();
-setTimeout(()=>{
-window.location.href="detail.html?id=" + encodeURIComponent(id);
-},400);
+ showLoading();
+ setTimeout(()=>{
+   window.location.href = "detail.html?id=" + encodeURIComponent(id);
+ },300);
 }
-tg.expand();
 
-let items = [];
-
+// FETCH BACKEND
 fetch("https://dorama-repository-fp.onrender.com/api/catalog")
-.then(r=>r.json())
-.then(data => {
- items = data;
- render(items);
-});
+.then(r => r.json())
+.then(data => render(data));
 
 function render(list){
  const grid = document.getElementById("productList");
  grid.innerHTML = "";
+
  list.forEach(d => {
-  const card = document.createElement("div");
-  card.className = "card item";
-  card.dataset.category = d.category || "popular";
-   card.innerHTML += `
-       <img src="${d.cover}">
-       <div class="card-content">
-         <h4 class="title">${d.title}</h4>
+   const card = document.createElement("div");
+   card.className = "card item";
+   card.dataset.category = d.category || "popular";
+
+   card.innerHTML = `
+     <img src="${d.cover}">
+     <div class="card-content">
+       <h4 class="title">${d.title}</h4>
        <p class="price">R$ ${d.price || "5,00"}</p>
        <button class="btn-buy">Comprar</button>
      </div>
    `;
-  card.addEventListener("click", () => {
-   openDetail(d.id || d.title);
+
+   // Clique no CARD abre DETAIL
+   card.addEventListener("click", () => {
+     openDetail(d.id || d.title);
+   });
+
+   grid.appendChild(card);
  });
-  grid.appendChild(card);
- });
+
  attachBuyButtons();
 }
-// BOTÃO COMPRAR
+
+// BOTÃO COMPRAR (SEPARADO)
 function attachBuyButtons(){
-document.querySelectorAll(".btn-buy").forEach(btn=>{
-btn.addEventListener("click", function(e){
-e.preventDefault();
-e.stopImmediatePropagation();
-e.stopPropagation();
- const card = this.closest(".card");
- const title = card.querySelector(".title").innerText;
-showLoading();
-setTimeout(()=>{
-hideLoading();
-alert("💜 Compra iniciada — redirecionando ao pagamento...");
-window.location.href = "detail.html?produto=" + encodeURIComponent(title);
-},600);
-});
-});
+ document.querySelectorAll(".btn-buy").forEach(btn=>{
+   btn.addEventListener("click", function(e){
+     e.preventDefault();
+     e.stopImmediatePropagation();
+     e.stopPropagation();
+
+     const card = this.closest(".card");
+     const title = card.querySelector(".title").innerText;
+
+     showLoading();
+     setTimeout(()=>{
+       hideLoading();
+       alert("💜 Compra iniciada — indo para pagamento...");
+       window.location.href = "detail.html?produto=" + encodeURIComponent(title);
+     },400);
+   });
+ });
 }
 </script>
 
