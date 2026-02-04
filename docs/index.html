@@ -232,7 +232,7 @@ function render(list){
        <div class="card-content">
          <h4 class="title">${d.title}</h4>
        <p class="price">R$ ${d.price || "5,00"}</p>
-       <button class="btn-buy">Comprar</button>
+       <button class="btn-buy">Comprar1</button>
        </div>
      </div>
    `;
@@ -250,7 +250,7 @@ showLoading();
 setTimeout(()=>{
 hideLoading();
 alert("💜 Compra iniciada — redirecionando ao pagamento...");
- window.location.href = "./detail.html?produto=" + encodeURIComponent(title);
+ window.location.href = "detail.html?produto=" + encodeURIComponent(title);
 },600);
 });
 });
