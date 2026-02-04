@@ -226,16 +226,21 @@ function render(list){
  const grid = document.getElementById("productList");
  grid.innerHTML = "";
  list.forEach(d => {
-   grid.innerHTML += `
-     <div class="card item" data-category="${d.category ||'popular'}" onclick="openDetail=('${d.id || d.title}')">
+  const card = document.createElemet("div");
+  card.className = "card item";
+  card.dataset.category = d.category || "popular";
+   card.innerHTML += `
        <img src="${d.cover}">
        <div class="card-content">
          <h4 class="title">${d.title}</h4>
        <p class="price">R$ ${d.price || "5,00"}</p>
        <button class="btn-buy">Comprar</button>
-       </div>
      </div>
    `;
+  card.addEventListener("click", () => {
+   openDetail(d.id || d.title);
+ });
+  grid.appendChild(card);
  });
  attachBuyButtons();
 }
@@ -244,6 +249,7 @@ function attachBuyButtons(){
 document.querySelectorAll(".btn-buy").forEach(btn=>{
 btn.addEventListener("click", function(e){
 e.preventDefault();
+e.stopImmeddiatePropagation();
 e.stopPropagation();
  const card = this.closest(".card");
  const title = card.querySelector(".title").innerText;
