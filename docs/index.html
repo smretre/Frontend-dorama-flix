@@ -208,7 +208,7 @@ setTimeout(hideLoading,400);
 function openDetail(id){
 showLoading();
 setTimeout(()=>{
-window.location.href="detail.html?id="+id;
+window.location.href="detail.html?id=" + encodeURIComponent(id);
 },400);
 }
 tg.expand();
@@ -227,7 +227,7 @@ function render(list){
  grid.innerHTML = "";
  list.forEach(d => {
    grid.innerHTML += `
-     <div class="card item" data-category="${d.category ||'popular'}" onclick=openDetail="('${d.id || d.title}')">
+     <div class="card item" data-category="${d.category ||'popular'}" onclick="openDetail=('${d.id || d.title}')">
        <img src="${d.cover}">
        <div class="card-content">
          <h4 class="title">${d.title}</h4>
@@ -250,7 +250,7 @@ showLoading();
 setTimeout(()=>{
 hideLoading();
 alert("💜 Compra iniciada — redirecionando ao pagamento...");
- window.location.href = "detail.html?produto=" + encodeURIComponent(title);
+window.location.href = "detail.html?produto=" + encodeURIComponent(title);
 },600);
 });
 });
