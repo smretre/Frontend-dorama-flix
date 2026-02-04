@@ -223,21 +223,29 @@ fetch("https://dorama-repository-fp.onrender.com/api/catalog")
 });
 
 function render(list){
- const grid = document.getElementById("grid");
+ const grid = document.getElementById("productList");
  grid.innerHTML = "";
  list.forEach(d => {
    grid.innerHTML += `
-     <div class="card" onclick="openItem('${d._id}')">
+     <div class="card item" data-category="${d.category ||'popular'}" onclick="openDetail('${d._id}')">
        <img src="${d.cover}">
-       <p>${d.title}</p>
+       <div class="card-content">
+         <h4 class="title">${d.title}</h4>
+       <p class="price">R$ ${d.price || "5,00"}</p>
+       <button class="btn-buy">Comprar</button>
+       </div>
      </div>
    `;
  });
+ attachBuyButtons();
 }
 // BOTÃO COMPRAR
+function attachBuyButtons(){
 document.querySelectorAll(".btn-buy").forEach(btn=>{
 btn.addEventListener("click", e=>{
 e.stopPropagation();
+ const card = btn.closest(".card");
+ const title = card.querySelector(".title").innerText;
 showLoading();
 setTimeout(()=>{
 hideLoading();
@@ -246,6 +254,7 @@ alert("💜 Compra iniciada — redirecionando ao pagamento...");
 },600);
 });
 });
+}
 </script>
 
 </body>
