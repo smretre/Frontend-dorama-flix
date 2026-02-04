@@ -242,9 +242,10 @@ function render(list){
 // BOTÃO COMPRAR
 function attachBuyButtons(){
 document.querySelectorAll(".btn-buy").forEach(btn=>{
-btn.addEventListener("click", e=>{
+btn.addEventListener("click", function(e){
+e.preventDefault();
 e.stopPropagation();
- const card = btn.closest(".card");
+ const card = this.closest(".card");
  const title = card.querySelector(".title").innerText;
 showLoading();
 setTimeout(()=>{
